@@ -1,20 +1,24 @@
 <?php
   // ここにDBに登録する処理を記述する
-  $nickname = htmlspecialchars($_POST['nickname']);
-  $email = htmlspecialchars($_POST['email']);
-  $content = htmlspecialchars($_POST['content']);
 
   // １．データベースに接続する
-  $dsn = 'mysql:dbname=phpkiso;host=localhost';
+  $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
   $user = 'root';
   $password='';
   $dbh = new PDO($dsn, $user, $password);
   $dbh->query('SET NAMES utf8');
 
-  // ２．SQL文を実行する
-  $sql = '';
+ // POSTでデータが送信された時のみSQLを実行する
+  if (!empty($_POST)) {
+    $nickname = $_POST['nickname'];
+    $comment = $_POST['comment'];
+
+  // ２．SQL文を実行する(INSERT文)
+  $sql = "INSERT INTO `posts`(`id`, `nickname`, `comment`, `created`) VALUES (null,'".$nickname."','".$comment."',now())";
   $stmt = $dbh->prepare($sql);
-  $stmt->execute();
+  $stmt->execute();  
+
+}
 
   // ３．データベースを切断する
   $dbh = null;
@@ -33,6 +37,8 @@
       <p><button type="submit" >つぶやく</button></p>
     </form>
     <!-- ここにニックネーム、つぶやいた内容、日付を表示する -->
+
+
 
 </body>
 </html>
